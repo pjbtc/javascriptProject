@@ -1,0 +1,231 @@
+var weather;
+var canvas;
+var city;
+//var api ='http://api.openweathermap.org/data/2.5/weather?q=';
+var api='https://api.openweathermap.org/data/2.5/forecast/daily?q=';
+//var city ='london';
+var apiKey ='&APPID=ad6e239ec0ac58d0a9836e942aac97eb';
+//var units='&units=metric';
+var units ='&cnt=16&units=metric';
+var input;
+var minY=[];
+var maxY=[];
+var evenY=[];
+var drop=[];
+//var button;
+//http://api.openweathermap.org/data/2.5/forcast/daily?q=london&APPID=ad6e239ec0ac58d0a9836e942aac97eb&units=metric
+//https://samples.openweathermap.org/data/2.5/forecast/daily?id=524901&lang=zh_cn&appid=b1b15e88fa797225412429c1c50c122a1
+//https://api.openweathermap.org/data/2.5/forecast/daily?q=dublin&appid=ad6e239ec0ac58d0a9836e942aac97eb&cnt=16&units=metric
+function setup() {
+          //createCanvas(500, 500);
+          canvas =createCanvas(700, 500);
+          //canvas.position(20, 30);
+          
+          
+           var button = select('#submit');
+          //button = createButton('#submit');
+          button.mousePressed(weatherAsk);
+          input = select('#city'); // input to select city
+}
+
+function weatherAsk(){
+          var url = api+input.value()+apiKey+units;
+          //var url = api +city + apiKey +units;
+          loadJSON(url, gotData);
+          //console.log(url);
+          //loadJSON("http://api.openweathermap.org/data/2.5/weather?q=London&APPID=97ce986d767f3b0e45734f07dcb949a7&units=metric" ,gotData);
+          
+  
+}
+
+function gotData(data) { // get JSON data from api
+           weather = data;
+  for(var i=0;i<weather.list.length;i++){
+  var mintemp=weather.list[i].temp.min;
+  var maxtemp=weather.list[i].temp.max;
+  var eventemp=weather.list[i].temp.eve;
+  minY[i]=map(mintemp,-5,40,height*0.8,0);
+  maxY[i]=map(maxtemp,-5,40,height*0.8,0);
+  evenY[i]=map(eventemp,-5,40,height*0.8,0);
+  }
+  
+  for (var j = 0; j < 100; j++) {
+    drop[j] = new Drop();
+  
+}
+}
+function draw(){
+          //clear();
+          background(0);
+          // clouds 
+ 
+          if(weather){ // wait until json is loaded
+             //var temp = weather.main.temp;
+            // var humidity = weather.main.humidity;
+             //ellipse(100, 100, temp, temp);
+             //ellipse(300, 100, humidity, humidity);
+             var todaytemp = weather.list[0].temp.eve;
+             var todayhumidity = weather.list[0].humidity;
+             var tommorrowhumidity = weather.list[1].humidity;
+             ellipse(50, 230, todayhumidity, todayhumidity);
+             ellipse(150, 230, todaytemp, todaytemp);
+             //ellipse(150, 150, tommorrowhumidity, tommorrowhumidity);
+             // displaying the weather information on screen
+             textSize(20);
+             stroke(255);
+             //noStroke();
+             text("City :" +weather.city.name, 0, 120);
+             text("Forecast:" +weather.list[0].weather[0].description, 0, 150);
+             text("Temperature:" +weather.list[0].temp.max+"°C", 0, 180);
+             //text("Forecast:16days/daily", 0, 100);
+            // text("Description:" +weather.weather[0].main, 0, 150);
+          //ellipse(100, 300, weather.main.temp, weather.main.temp);
+         // ellipse(300, 300, weather.main.humidity,weather.main.humidity);
+          //}
+          if(weather.list[0].weather[0].main =="Clouds"){
+                              noStroke();
+                              fill(255);
+                              //cloud1
+          ellipse(50, 50, 60, 50);
+          ellipse(80, 40, 60, 50);
+          ellipse(130, 50, 60, 50);
+          ellipse(70, 70, 60, 50);
+          ellipse(110, 65, 60, 50);
+          // cloud2
+          ellipse(250, 50, 60, 50);
+          ellipse(280, 40, 60, 50);
+          ellipse(330, 50, 60, 50);
+          ellipse(270, 70, 60, 50);
+          ellipse(310, 65, 60, 50);
+          // cloud3
+          
+           ellipse(450, 50, 60, 50);
+          ellipse(480, 40, 60, 50);
+          ellipse(530, 50, 60, 50);
+          ellipse(470, 70, 60, 50);
+          ellipse(510, 65, 60, 50);
+                    
+          }
+          for(var i=0;i<weather.list.length;i++){
+          if (weather.list[i].weather[0].main=="Rain"){
+        for (var j = drop.length - 1; j >= 0; j--) {
+         drop[j].show();
+         drop[j].fall();         
+        }//end for loop j
+          }
+}
+
+
+
+// tall skyscrapers2
+for(var x= 500; x < 570; x +=20){
+            for(var y=400; y<500; y+=20){
+                      fill(134, 23, 100);
+                      rect(x,y, 20, 20);
+            }
+}
+// buildings1
+for(var x= 20; x < 70; x +=20){
+            for(var y=450; y<500; y+=20){
+                      fill(134, 23, 100);
+                      rect(x,y, 20, 20);
+            }
+}
+
+// building3
+for(var x= 600; x < 630; x +=20){
+            for(var y=350; y<500; y+=20){
+                      
+                      fill(134, 23, 100);
+                      rect(x,y, 20, 20);
+            }
+}
+// mountains 
+          fill(51, 66, 49);
+          //noStroke();
+          triangle(100, 500, 500, 500, 300, 200);
+          fill(52, 82, 48);
+          triangle(300, 500, 500, 500, 400, 300);
+          
+          
+          // stones and gravals
+          fill(194, 128, 58);
+          ellipse(150, 490, 25, 20);
+          fill(52, 82, 48);
+          ellipse(170, 485, 20, 30);
+           fill(194, 128, 58);
+          
+          ellipse(190, 490, 25, 20);
+          fill(92, 56, 17);
+          ellipse(210, 490, 20, 20);
+          ellipse(230,485,15,30);
+          
+          fill(43, 25, 5);
+           ellipse(250, 490, 25, 20);
+          fill(0);
+          ellipse(270, 485, 20, 30);
+           fill(194, 128, 58);
+          
+          ellipse(290, 490, 25, 20);
+          fill(92, 56, 17);
+          ellipse(310, 490, 20, 20);
+          ellipse(330,485,15,30);
+          
+          fill(79, 43, 4);
+           ellipse(350, 490, 25, 20);
+          fill(0);
+          ellipse(370, 485, 20, 30);
+           fill(194, 128, 58);
+          
+          ellipse(390, 490, 25, 20);
+          fill(79, 43, 4);
+          ellipse(410, 490, 20, 20);
+          fill(99, 70, 39);
+          ellipse(430,485,15,30);
+          
+          
+/*translate(150, 50);
+          for(var i=0; i<10; i++){
+                    fill(255, 0, 0);
+                    //noStroke();
+                    ellipse(0,30, 15, 30);
+                    rotate(PI/5);
+                       //line(0,60, 0, 140);
+                    
+          }
+          stroke(255);
+          strokeWeight(2);
+          line(0,45, 0, 170);// flower stem    */
+
+// design of flowers
+translate(350, 420);
+          for(var i=0; i<10; i++){
+                    fill(255, 0, 0);
+                    //noStroke();
+                    ellipse(0,30, 15, 30);
+                    rotate(PI/5);
+                       //line(0,60, 0, 140);
+                    
+          }
+          stroke(255);
+          strokeWeight(2);
+          line(0,45, 0, 170);// flower stem 
+          
+
+
+}
+}
+function Drop() { // this function is implemented to create rainfall
+  this.x = random(0, width);
+  this.y = random(-1000, 0);
+  this.show = function() {
+    stroke(255,15);
+    line(this.x, this.y, this.x, this.y+10);
+     if(this.y>height){
+      this.y=0;
+    }
+  }; 
+  this.fall = function() {
+    this.y = this.y + 1;
+  };
+}
