@@ -1,6 +1,4 @@
-//multimedia programming
-//Assignment_repeat
-//2837202-2837202-pjbhattachan@gmail.com
+
 var weather;
 var city;
 var api='https://api.openweathermap.org/data/2.5/forecast/daily?q=';
